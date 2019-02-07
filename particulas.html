@@ -100,18 +100,17 @@
 <p id="tl">JavaScript</p>
 <!--**********************************************************************************************-->
 				<pre><code class="language-javascript">
-var nstars=1000;
+var nstars=1000; //catidad de objetos a iniciar
 var elemento=null;
 var lienzo=null;
 var stars=[];  //arreglo de objetos
 var parar=false;
 var bool;
-
 //estrella
 var giro_est1 = 0;
 var giro_est2 = 0;
 var vel = 0.03;
-
+//parametros posicion y tamaño de estrellas
 var X1 = 225;
 var Y1 = 240;
 var R1 = 100;	
@@ -119,7 +118,7 @@ var X2 = 225;
 var Y2 = 240;
 var R2 = 100;
 
-function iniciar(){
+function iniciar(){ //inicializa los objetos y variables
 	elemento=document.getElementById("lienzo2");
 	lienzo=elemento.getContext("2d");
 	llenar_arreglo();
@@ -153,12 +152,12 @@ function pos_tam(imput){
 	R2 = random(80)+10;
 }
 
-function animation_frame(){
+function animation_frame(){ //iniciamos el requestAnimationFrame
     animacion5();
 	bool=window.requestAnimationFrame(animation_frame);
 }
 
-function animacion5(){  
+function animacion5(){  //metodo con los procesos de animacion
     lienzo.clearRect(0,0,elemento.width,elemento.height);
     mover_arreglo();
 	mostrar_arreglo();
@@ -168,7 +167,7 @@ function animacion5(){
     estrella2();
 }
 
-//dibujo de estrellas
+//muestra la estrella giro antihorario
 function estrella1(){
     lienzo.fillStyle ="#1F618D";
     lienzo.lineWidth = 6;
@@ -187,7 +186,7 @@ function estrella1(){
     lienzo.fill();
 }
 
-function estrella2(){
+function estrella2(){ //muestra la estrella giro horario
     lienzo.fillStyle ="#7B241C";
     lienzo.lineWidth = 6;
     var L = 5;
@@ -207,13 +206,13 @@ function estrella2(){
 
 //parametros de las particulas
 function Star(x,y,timer,r,g,b,velx,vely){
-    this.x = (x===null)?0:x;
+    this.x = (x===null)?0:x; //posicion
     this.y = (y===null)?0:y;
-    this.timer=(timer===null)?0:timer;
-    this.r=r;
+    this.timer=(timer===null)?0:timer; //tiempo
+    this.r=r; //componentes del color
     this.g=g;
     this.b=b;
-    this.color= ""+"rgba("+r+","+g+","+b+","+1+")";
+    this.color= ""+"rgba("+r+","+g+","+b+","+1+")"; //color
     this.velx=velx;
     this.vely=vely;
 }

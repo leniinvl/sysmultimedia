@@ -105,7 +105,7 @@ var recy = [410, 410, 410, 410, 410, 410, 410, 410, 410];
 var reccolor = ["blue", "red", "green", "blue", "red", "green", "blue", "red", "green"];
 					
 var xmouse, ymouse; //posicion del mouse
-var mpresionado1=false; //press mouse
+var mpresionado1=false; //boolean presionado sobre el circulo
 var mpresionado2=false;
 var mpresionado3=false;
 var mpresionado4=false;
@@ -141,11 +141,7 @@ function iniciar(){
 	window.addEventListener("mouseup",fun_mlevantado,false);
 	window.addEventListener("mousedown",fun_mpresionado,false);
 }
-//recarga la pagina					
-function reload(){
-	location.reload(true);
-}
-					
+//borra el lienzo o canvas					
 function borrarcanvas(){
 	lienzo.clearRect(0,0,elemento.width,elemento.height);
 }
@@ -154,7 +150,7 @@ function press_circulo(ev){
 	//coordenadas del mouse en el canvas
 	xmouse=ev.x-rec_canvas.left;
 	ymouse=ev.y-rec_canvas.top;
-	// actualizar posicion
+	// actualiza las posiciones de los circulos sobre el que este presionado
 		if(mpresionado1==true){
 			cirx[0] = xmouse;
 			ciry[0] = ymouse;
@@ -217,7 +213,7 @@ function press_circulo(ev){
 		}
 } 
 		
-//verifica si el mouse fue presioinado sobre el objeto
+//verifica si el mouse fue presioinado sobre el objeto o circulo y lo establece en true
 function fun_mpresionado(ev){
 	if (Math.abs(cirx[0]-xmouse) + Math.abs(ciry[0]-ymouse) &lt; 15){
 		mpresionado1=true
@@ -266,6 +262,7 @@ function fun_mpresionado(ev){
 	}
 }
 			
+//si el mouse fue levantado establece los booleanos en falso
 function fun_mlevantado(ev){
 	mpresionado1=false;
 	mpresionado2=false;
@@ -284,16 +281,17 @@ function fun_mlevantado(ev){
 }
 				
 //detectemos la colision del objeto circular con el rectangulo
+//analiza cada circulo sobre cada rectangulo
 var detec_colision = 0;
 function colision(){
-	for (i = 0; i &lt; cirx.length; i++) {
-		for (j = 0; j &lt; recx.length; j++) {
+	for (i = 0; i &lt; cirx.length; i++) {  //recorre cada parametro del circulo
+		for (j = 0; j &lt; recx.length; j++) { //recorre cada rectangulo
 			if((cirx[i]+3.3&lt;recx[j]+50 && cirx[i]+6.6&gt;recx[j]) && 
 			   (ciry[i]+3.3&lt;recy[j]+30 && ciry[i]+6.6&gt;recy[j])){
 					if(circolor[i]==reccolor[j]){
 						cirx[i]=0;
 						ciry[i]=0;
-						cirbool[i]=false;
+						cirbool[i]=false; //si detecta la colision desaparece, no se muestra
 						detec_colision=1;
 					}else{
 						detec_colision=2;
@@ -302,7 +300,7 @@ function colision(){
 		}
 	}
 }
-					
+//sonidos de colision					
 function sound(){
 	if(detec_colision == 1){
 		correcto.play();
@@ -315,8 +313,8 @@ function sound(){
 	}
 }
 					
-//inicializamos las posiciones randomicas de los circulos y los colores
-//de los rectangulos
+//inicializamos las posiciones randomicas de los circulos 
+//y los colores de los rectangulos
 function val_random(){
 	for (i = 0; i &lt; cirx.length; i++) {
 		var valx = random(580)+20;
@@ -334,7 +332,6 @@ function val_random(){
 		cirx[i]=valx;
 		ciry[i]=valy;
 	}	
-					
 	var listado = ["blue", "blue", "blue", "green", "green", "green", "red", "red", "red"];
 	for (i=0; listado.length; i++) {
 		aleatorio = Math.floor(Math.random()*(listado.length));
@@ -342,32 +339,31 @@ function val_random(){
 		listado.splice(aleatorio, 1);
 	}				
 }
-					
-					
+										
 function random(valor){
 	return(Math.random()*valor);
 }
-					
+//iniciamos el requestAnimationFram
 function animation_frame(){
 	animacion5();
 	bool=window.requestAnimationFrame(animation_frame);
 }
-					
+//metodo del proceso de animacion					
 function animacion5(){  
-	borrarcanvas();
-	print_rectangulo();
-	print_circulo();
-	colision();
+	borrarcanvas(); //borramos el canvas
+	print_rectangulo(); //mostramos los rectangulos
+	print_circulo(); //mostramos los circulos
+	colision(); //detectamos la colision
 }
 					
-function print_circulo() {
+function print_circulo() { //mostramos todos los circulos
 	for (i = 0; i &lt; cirx.length; i++) {
 		if(cirbool[i]==true){
 			circulo(cirx[i],ciry[i],circolor[i]);
 		}
 	}
 }
-function print_rectangulo() {
+function print_rectangulo() { //mostramos todos los rectangulos
 	for (i = 0; i &lt; recx.length; i++) {
 		rectangulo(recx[i],recy[i],reccolor[i]);
 	}
@@ -394,9 +390,14 @@ window.addEventListener("load",iniciar,false);
 				</p>
 
 				<center>
-					<button name="btnreload1" type="button" id="borrar"
+					<button name="btnreload1" type="button" id="button"
 						value="reload1" onclick="reload()">    
 						CARGAR NUEVO
+					</button>
+
+					<button name="btnreload1" type="button" id="borrar"
+						value="reload1" onclick="reiniciar()">    
+						ACTUALIZAR
 					</button>
 		
 					<div id="contenedor2">

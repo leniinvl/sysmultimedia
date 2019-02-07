@@ -206,9 +206,9 @@ if (Sel.ad2.selectedIndex != 0){
 		var pixels = imageData.data;
 		var factor;
 		var contrast = 100; // Default value
-		factor = ( 259 * ( contrast + 255 ) ) / ( 255 * ( 259 - contrast ) );
+		factor = ( 259 * ( contrast + 255 ) ) / ( 255 * ( 259 - contrast ) ); //valor del factor
 			for ( var i = 0; i < pixels.length; i++ ) {
-			var r = pixels[ i * 4 ];
+			var r = pixels[ i * 4 ]; //evalua cada pixel
 			var g = pixels[ i * 4 + 1 ];
 			var b = pixels[ i * 4 + 2 ];
 			pixels[ i * 4 ] = factor * ( r - 128 ) + 128;

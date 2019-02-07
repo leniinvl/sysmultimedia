@@ -51,7 +51,11 @@ function iniciar(){
 }
 
 function reload(){
-    location.reload(true);
+	location.reload(true);
+}
+
+function reiniciar(){
+	iniciar();
 }
 
 function borrarcanvas(){
