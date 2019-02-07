@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Sistemas Multimedia</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/javascript_imagen.js"></script>
+</head>
+ 
+<body style="background: url(images/background_f4.jpg);">
+	
+	<header id="main-header">
+		<a id="logo-header" href="index.html">
+			<span class="site-name">IMAGENES - CANVAS</span>
+      		<span class="site-desc">UTE / Sistemas Multimedia</span>
+		</a> 
+
+		<div id="header">
+			<ul class="nav">
+				<li><a href="colisiones.html">Control-Colisiones</a></li>
+				<li><a href="particulas.html">Sistema-Particulas</a></li>
+				<li><a href="imagen.html">Procesamiento-Imagenes</a></li>
+				<li><a href="home.html">Inicio</a></li>
+			</ul>
+		</div>	
+
+	</header>
+ 
+	
+	<section id="main-content">
+		<article>
+
+			<header class="header-content">
+				<h1>Procesamiento de imagenes</h1>
+			</header>
+						
+			<div class="content">
+
+				<p id="parr">	
+					Es frecuente a día de hoy ver aplicaciones web y móviles que modifican nuestras fotografías aplicándoles filtros. Los paquetes tradicionales de software 
+					de escritorio llevan décadas trabajando los mismos resultados con técnicas similares a las que vamos a ver a continuación. La idea básica es aquí conocer el 
+					algoritmo que debe aplicarse sobre cada píxel para conseguir el efecto deseado. 
+				</p>
+
+					<p class="titulo"><strong id="tl">Blanco y negro</strong><br></p>
+
+				<p id="parr">
+					 Quizá este filtro es el más antiguo de todos. La idea es sumamente simple: eliminar la información de color de una imagen para pasarla a escala de grises.
+					<br>Un apunte interesante es que entender que, este tipo de filtros donde se destruye información (en este caso cromática), no es reversible. Dicho de otro modo: 
+					no es posible reconstruir el color de una imagen en blanco y negro a partir de un algoritmo natural.
+					<br>
+					El algoritmo es trivial, y se corresponde con la siguiente fórmula:
+				</p>
+
+				<p>
+					<tt>
+						Gray = ( Red + Green + Blue ) / 3<br>
+						For Each Pixel in Image {<br>
+						&nbsp; &nbsp; Red = Pixel.Red<br>
+						&nbsp; &nbsp; Green = Pixel.Green<br>
+						&nbsp; &nbsp; Blue = Pixel.Blue<br>
+						&nbsp; &nbsp; Gray = ( Red + Green + Blue ) / 3<br>
+						&nbsp; &nbsp; Pixel.Red = Gray<br>
+						&nbsp; &nbsp; Pixel.Green = Gray<br>
+						&nbsp; &nbsp; Pixel.Blue = Gray<br>
+						}
+					</tt>
+				</p>
+
+					<p class="titulo"><strong id="tl">Negativo</strong><br></p>
+
+				<p id="parr">
+					Otro filtro que desde siempre nos ha acompañado en los programas de edición gráfica es el que nos permite invertir la información cromática de una imagen. 
+					Técnicamente, convierte una imagen positiva en negativo y viceversa.
+					<br>
+					En este caso, el algoritmo (también muy sencillo) sería el siguiente:
+				</p>
+
+				<p>
+					<tt>
+						Red = 255 - r<br>
+						Green = 255 - g<br>
+						Blue = 255 - b<br>
+						For Each Pixel in Image {<br>
+						&nbsp; &nbsp; Red = Pixel.Red<br>
+						&nbsp; &nbsp; Green = Pixel.Green<br>
+						&nbsp; &nbsp; Blue = Pixel.Blue<br>
+						&nbsp; &nbsp; Pixel.Red = 255 - Red<br>
+						&nbsp; &nbsp; Pixel.Green = 255 - Green<br>
+						&nbsp; &nbsp; Pixel.Blue = 255 - Blue<br>
+						}							 
+						</tt>
+				</p>		
+
+					<p class="titulo"><strong id="tl">Contraste</strong><br></p>
+
+				<p id="parr">
+				  	Algunos filtros requieren además del algoritmo base, un valor o factor de referencia. Un ejemplo de esto es la manipulación del brillo o contraste en una 
+					imagen donde, por lo general, el usuario ajusta la cantidad deseada mediante algún control implementado en la UI.
+					<br>
+					El algoritmo se compone de dos pasos: <br>
+					 - Cálculo del factor a partir de un valor dado. <br>
+					 - Cálculo del valor de cada píxel tras aplicar el factor anterior. <br>
+					Expresado como fórmula, tendríamos:
+				</p>
+
+				<p>
+					<tt>
+						FACTOR = ( 259( contrast + 255 ) ) / ( 255( 259 - contrast ) )<br>
+						Red = FACTOR * (r - 128) + 128;<br>
+						Green = FACTOR * (g - 128) + 128;<br>
+						Blue = FACTOR * (b - 128) + 128;<br>							 
+					</tt>
+				</p>
+
+				
+				<br>
+					<p class="titulo"><strong id="tl">APLICACIÓN</strong><br></p>
+<p id="tl">HTML</p>
+<!--**********************************************************************************************-->
+				<pre><code class="language-javascript">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;TODO supply a title&lt;/title&gt;
+	&lt;meta charset="windows-1252"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+	&lt;script src="animacion.js"&gt;&lt;/script&gt;
+&lt;link rel="styleSheet" href="animacion1.css" type="text/css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;form action=""&gt;
+	&lt;select style="background: rgb(63, 77, 84)" name="ad2" onchange="fun_intensidad(this.form)"&gt;
+		&lt;option selected&gt; Seleccione tipo&lt;/option&gt;
+		&lt;option value="1"&gt;Blanco y negro&lt;/option&gt;
+		&lt;option value="2"&gt;Negativo&lt;/option&gt;
+		&lt;option value="3"&gt;Contraste&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;/form&gt;	
+	&lt;div&gt;
+		&lt;canvas id="lienzo3" width="700" height="450"&gt;	&lt;/canvas&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;			
+				</code></pre>
+<!--**********************************************************************************************-->
+<p id="tl">CSS</p>
+<!--**********************************************************************************************-->
+				<pre><code class="language-javascript">
+#lienzo3{
+	border: 4px solid rgb(83, 83, 83);
+	background: #dee4e7;
+}					
+				</code></pre>
+<!--**********************************************************************************************-->
+<p id="tl">JavaScript</p>
+<!--**********************************************************************************************-->
+				<pre><code class="language-javascript">
+var micanvas3;
+var lienzo3; 
+var image = new Image();
+
+function iniciar(){
+	micanvas3 = document.getElementById("lienzo3");
+	lienzo3 = micanvas3.getContext("2d");
+	image.src = "images/foto.jpg";
+	image.onload = function() {
+		lienzo3.drawImage(image, 0, 0);
+	}
+}
+
+function fun_intensidad(Sel){
+if (Sel.ad2.selectedIndex != 0){
+	var tipo = Sel.ad2.options[Sel.ad2.selectedIndex].value;
+	if(tipo == 1){ //BLANCO Y NEGRO	
+		var srcImg = new Image();
+		lienzo3.drawImage(srcImg, 0, 0, micanvas3.width, micanvas3.height);
+		var imgData = lienzo3.getImageData(0, 0, micanvas3.width, micanvas3.height);
+		var pixels = imgData.data;
+		for (var i = 0; i < pixels.length; i += 4) {
+			//calcula la luminosidad percibida para este pixel
+			var luminosidad = parseInt((pixels[i] + pixels[i + 1] + pixels[i + 2])/3);
+			pixels[i] = luminosidad; // rojo
+			pixels[i + 1] = luminosidad; // verde
+			pixels[i + 2] = luminosidad; // azul
+		}
+		lienzo3.putImageData(imgData, 0, 0);
+	} else if(tipo == 2){ //NEGATIVO
+		var srcImg = new Image();
+		// dibuja la imagen en el canvas
+		lienzo3.drawImage(srcImg, 0, 0, micanvas3.width, micanvas3.height);
+		//Devuelve un objeto imgData con los datos de todos los píxeles de la imagen
+		var imgData = lienzo3.getImageData(0, 0, micanvas3.width, micanvas3.height);
+		var pixels = imgData.data;
+		// recorre uno a uno los pixeles de la imagen y cambia el color por el complementario
+		for (var i = 0; i < pixels.length; i += 4) {
+			pixels[i] = 255 - pixels[i]; // rojo
+			pixels[i + 1] = 255 - pixels[i + 1]; // verde
+			pixels[i + 2] = 255 - pixels[i + 2]; // azul
+		}
+		// pone la imagen modificada en el canvas
+		// observe que dirtyX = 25 y dirtyY = 25 
+		lienzo3.putImageData(imgData, 0, 0);
+	}else{ //CONTRASTE
+		var imageData = lienzo3.getImageData(0, 0, micanvas3.width, micanvas3.height);
+		var pixels = imageData.data;
+		var factor;
+		var contrast = 100; // Default value
+		factor = ( 259 * ( contrast + 255 ) ) / ( 255 * ( 259 - contrast ) );
+			for ( var i = 0; i < pixels.length; i++ ) {
+			var r = pixels[ i * 4 ];
+			var g = pixels[ i * 4 + 1 ];
+			var b = pixels[ i * 4 + 2 ];
+			pixels[ i * 4 ] = factor * ( r - 128 ) + 128;
+			pixels[ i * 4 + 1 ] = factor * ( g - 128 ) + 128;
+			pixels[ i * 4 + 2 ] = factor * ( b - 128 ) + 128;
+		}
+		lienzo3.putImageData( imageData, 0, 0 );
+	}	
+}
+}
+
+window.addEventListener("load",iniciar,false);
+				</code></pre>
+<!--**********************************************************************************************-->
+
+				<p id="parr">
+					El sistema se comportará de la siguiente forma:
+				</p>
+<Center>
+				<form action="">
+						<button name="btnreload1" type="button" id="borrar"
+								value="reload1" onclick="fun_borrar3()">    
+								LIMPIAR CANVAS
+						</button>
+			
+						<select name="ad" onchange="fun_cargarImagen4(this.form)">
+								<option selected> Seleccione una imagen</option>
+								<option value="images/im1.jpg">images/im1.jpg</option>
+								<option value="images/im2.jpg">images/im2.jpg</option>
+								<option value="images/im3.jpg">images/im3.jpg</option>
+								<option value="images/im4.jpg">images/im4.jpg</option>
+								<option value="images/im5.jpg">images/im5.jpg</option>						
+						</select>
+
+						<select style="background: rgb(63, 77, 84)" name="ad2" onchange="fun_intensidad(this.form)">
+								<option selected> Seleccione tipo</option>
+								<option value="1">Blanco y negro</option>
+								<option value="2">Negativo</option>
+								<option value="3">Contraste</option>
+						</select>
+				</form>	
+
+				<div id="contenedor3">
+					<canvas id="lienzo3" width="700" height="450"></canvas>
+				</div>
+</Center>
+<!--***************************************************************-->
+    		</div>
+		</article> 
+  </section> 
+ 
+	<footer id="main-footer">
+		<p>Lenin Ulcuango</p>
+		<p>&copy; Todos los Derechos Reservados</p>
+	</footer> 
+
+</body>
+</html>
+

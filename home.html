@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Sistemas Multimedia</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+ 
+<body style="background: url(images/background_f1.jpg);">
+	
+	<header id="main-header">
+		<a id="logo-header" href="index.html">
+			<span class="site-name">PROYECTO FINAL</span>
+      		<span class="site-desc">UTE / Sistemas Multimedia</span>
+		</a> 
+
+		<div id="header">
+			<ul class="nav">
+				<li><a href="colisiones.html">Control-Colisiones</a></li>
+				<li><a href="particulas.html">Sistema-Particulas</a></li>
+				<li><a href="imagen.html">Procesamiento-Imagenes</a></li>
+				<li><a href="home.html">Inicio</a></li>
+			</ul>
+		</div>
+
+	</header>
+
+	
+	<section id="main-content">
+		<article>
+						
+			<div class="content">
+					<Center>
+						<img id="imagen_ute" src="images/ute.png" alt="canvas" /> <br><br>
+						<p style="font-size: 1.5em">Facultad de Ciencias de la Ingeniería e Industrias <br><br>
+							 Ingeniería Informática y Ciencias de la Computación <br><br>
+							 Sistemas Multimedia<br><br>
+							 Lenin Ulcuango</p>
+					</Center>
+
+					<p id="tl"> Introducción</p>
+
+					<p id="parr">
+						El propósito del proyecto es crear una página Web como aporte final de la asignatura Sistemas Multimedia, la cual estará compuesta
+						de teoría y aplicación de animaciones con el uso del objeto canvas con JavasScript en HTML, brindando un recurso multimedia para el buen aprovechamiento
+						de los recursos. Es esencial mencionar que para el correcto funcionamiento del proyecto este debera estar alojado en un Servidor HTTP Apache como puede 
+						ser con Xammp o WampServer entre los mas conocidos.  
+					</p>
+
+					<p id="parr">
+						Canvas (o lienzo) es un elemento incorporado en HTML5 que permite la generación de gráficos dinámicamente por medio del scripting. 
+						Entre otras cosas, permite la renderización interpretada dinámica de gráficos 2D y mapas de bits, asi como animaciones con estos gráficos. 
+						Se trata de un modelo de procedimiento de bajo nivel, que actualiza un mapa de bits y no tiene una gráfica de escena integrada.
+						El objeto canvas permite contener diferentes objetos, incluyendo imágenes y videos, lo que permite aplicar varios procedimientos
+						con el uso de JavaScript para transformarlos y animarlos.	
+					</p>
+
+					<p id="parr">Para crear un elemento CANVAS se aplica la siguiente estructura a nivel de HTML:</p>
+				
+					<!--*********************-->
+					<pre><code class="language-javascript">
+&lt;canvas height="300px" width="300px" id="lienzo"&gt; &lt;/canvas&gt;
+					</code></pre>
+
+					<p>En Javascript, sus objetos de definen e inicializan:</p>
+					<pre><code class="language-javascript">
+var micanvas; 
+var lienzo; 
+function iniciar(){
+		micanvas = document.getElementById("lienzo");
+		lienzo = micanvas.getContext("2d");
+}
+window.addEventListener("load",iniciar,false);
+					</code></pre>
+					<!--*********************-->
+
+    		</div>
+		</article> 
+  </section> 
+ 
+	<footer id="main-footer">
+      <p>Lenin Ulcuango</p>
+      <p>&copy; Todos los Derechos Reservados</p>
+	</footer> 
+
+</body>
+</html>
+

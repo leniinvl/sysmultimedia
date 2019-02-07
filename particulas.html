@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Sistemas Multimedia</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/javascript_objetos.js"></script>
+</head>
+ 
+<body style="background: url(images/background_f3.jpg);">
+	
+	<header id="main-header">
+		<a id="logo-header" href="index.html">
+			<span class="site-name">PARTICULAS - CANVAS</span>
+     		<span class="site-desc">UTE / Sistemas Multimedia</span>
+		</a> 
+
+		<div id="header">
+			<ul class="nav">
+				<li><a href="colisiones.html">Control-Colisiones</a></li>
+				<li><a href="particulas.html">Sistema-Particulas</a></li>
+				<li><a href="imagen.html">Procesamiento-Imagenes</a></li>
+				<li><a href="home.html">Inicio</a></li>
+			</ul>
+		</div>	
+	</header>
+ 
+	
+	<section id="main-content">
+		<article>
+
+			<header class="header-content">
+				<h1>Sistema de particulas y objetos</h1>
+			</header>
+						
+			<div class="content">
+				
+				<p id="parr">	
+					Canvas es una alternativa para crear animaciones interactivas y multiplataforma que funcionen en dispositivos móviles y computadoras de escritorio. <br>
+					En tiempos remotos se utilizaba el método <tt>setInterval()</tt> de javascript para hacer animaciones en canvas. Se lograba animar, pero era ineficiente.
+					Ahora se ha creado el método <tt>requestAnimationFrame()</tt>, este provee formas amigables y mas eficientes  para animar llamando cada marco de animación 
+					cuando el sistema esta listo para dibujar. La cantidad de devoluciones de llamadas suele ser 60 veces por segundo y podría ser reducido a menor 
+					periodo cuando se corre en un segundo plano. 
+				</p>
+
+				<p id="tl">Pasos básicos de animación</p>
+				<p id="parr">	
+					1.- Limpiar el canvas: A menos que las formas que vas a dibujar llenen el canvas completo (por ejemplo, una imagen de fondo), debes borrar cualquier 
+					  forma que haya dibujado previamente. La forma más fácil de hacerlo es usar el método <tt>clearRect()</tt>. <br> <br>
+					2.- Guardar el estado del canvas:	Si estás cambiando alguna configuración (como estilos, transformaciones, etc.) que afecte el estado del canvas y
+					  deseas asegurarte de que se utiliza el estado original cada vez que se dibuja una figura, debes guardar ese estado original. <br> <br>
+					3.- Dibujar formas animadas: El paso en el que realizas el renderizado del cuadro actual. <br> <br>
+					4.- Restaurar el estado del canvas: Si has guardado el estado, restáuralo antes de dibujar un nuevo cuadro. <br>
+				</p>
+
+				<p id="tl">Animación</p>
+				<p id="parr">	
+					Para animar el movimiento de objetos y dar la impresion visual de un sitemas de particulas en canvas es importante crear un array donde guardar 
+					todas las características de cada partícula en parte. Los parametros a considerar de las particulas que queremos animar es esencialmente las
+					posiciones (x, y) referente al plano canvas y el alto y ancho del objeto. Al inicio de la animación la particula se encontrara en una posición 
+					x1 , y1 y a medida que sigue la animacion estos parametros de posición irán variando y actualizando el dibujo o fotograma anterior.
+				</p>
+
+<p class="titulo"><strong id="tl">APLICACIÓN</strong><br></p>
+				
+<p id="tl">HTML</p>
+<!--**********************************************************************************************-->
+				<pre><code class="language-javascript">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;TODO supply a title&lt;/title&gt;
+	&lt;meta charset="windows-1252"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+	&lt;script src="animacion.js"&gt;&lt;/script&gt;
+&lt;link rel="styleSheet" href="animacion1.css" type="text/css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=""&gt;
+&lt;p&gt;Número de particulas (1 - 2000) &lt;br&gt;
+&lt;input type="number" id="int" name="name" min="0" max="2000" value="1000" onchange="particulas(this.form)"&gt;
+&lt;/p&gt;
+&lt;/form&gt;
+	&lt;div&gt;
+		&lt;canvas id="lienzo2" width="700" height="450"&gt;&lt;/canvas&gt;
+	&lt;/div&gt;	
+&lt;/body&gt;
+&lt;/html&gt;			
+				</code></pre>
+<!--**********************************************************************************************-->
+<p id="tl">CSS</p>
+<!--**********************************************************************************************-->
+				<pre><code class="language-javascript">
+#lienzo2{
+	border: 4px solid rgb(83, 83, 83);
+	background: #dee4e7;
+}
+   				</code></pre>
+<!--**********************************************************************************************-->
+<p id="tl">JavaScript</p>
+<!--**********************************************************************************************-->
+				<pre><code class="language-javascript">
+var nstars=1000;
+var elemento=null;
+var lienzo=null;
+var stars=[];  //arreglo de objetos
+var parar=false;
+var bool;
+
+//estrella
+var giro_est1 = 0;
+var giro_est2 = 0;
+var vel = 0.03;
+
+var X1 = 225;
+var Y1 = 240;
+var R1 = 100;	
+var X2 = 225;
+var Y2 = 240;
+var R2 = 100;
+
+function iniciar(){
+	elemento=document.getElementById("lienzo2");
+	lienzo=elemento.getContext("2d");
+	llenar_arreglo();
+	mostrar_arreglo();
+	pos_tam();
+	estrella1();
+	estrella2();
+	animation_frame();
+}
+
+//capturamos el numero de particulas ingresado
+function particulas(imput){
+	var numero = imput.int.value;
+	if (numero&gt;0 && numero&lt;2000){
+		nstars = numero;
+		pos_tam();
+	}else{
+		nstars = 2000;
+		pos_tam();
+	}
+}
+
+//randon para la posicion y tamaño de las estrellas
+function pos_tam(imput){
+	X1 = random(500)+100;
+	Y1 = random(250)+100;
+	R1 = random(80)+10;
+
+	X2 = random(500)+100;
+	Y2 = random(250)+100;
+	R2 = random(80)+10;
+}
+
+function animation_frame(){
+    animacion5();
+	bool=window.requestAnimationFrame(animation_frame);
+}
+
+function animacion5(){  
+    lienzo.clearRect(0,0,elemento.width,elemento.height);
+    mover_arreglo();
+	mostrar_arreglo();
+	giro_est1 -= vel;
+	giro_est2 += vel;
+	estrella1();
+    estrella2();
+}
+
+//dibujo de estrellas
+function estrella1(){
+    lienzo.fillStyle ="#1F618D";
+    lienzo.lineWidth = 6;
+    var L = 5;
+    var paso = 2;
+    var estrella= L / paso;
+    var rad = (2*Math.PI) / estrella;
+    lienzo.beginPath();
+            for( var i = 0; i &lt; L; i++ ){
+            x = X1 + R1 * Math.cos( rad*i+giro_est1 );
+            y = Y1 + R1 * Math.sin( rad*i+giro_est1 );
+            lienzo.lineTo(x, y);
+            }
+            lienzo.closePath();
+    lienzo.stroke();
+    lienzo.fill();
+}
+
+function estrella2(){
+    lienzo.fillStyle ="#7B241C";
+    lienzo.lineWidth = 6;
+    var L = 5;
+    var paso = 2;
+    var estrella= L / paso;
+    var rad = (2*Math.PI) / estrella;
+    lienzo.beginPath();
+            for( var i = 0; i &lt; L; i++ ){
+            x = X2 + R2 * Math.cos( rad*i+giro_est2);
+            y = Y2 + R2 * Math.sin( rad*i+giro_est2);
+            lienzo.lineTo(x, y);
+            }
+            lienzo.closePath();
+    lienzo.stroke();
+    lienzo.fill();
+}
+
+//parametros de las particulas
+function Star(x,y,timer,r,g,b,velx,vely){
+    this.x = (x===null)?0:x;
+    this.y = (y===null)?0:y;
+    this.timer=(timer===null)?0:timer;
+    this.r=r;
+    this.g=g;
+    this.b=b;
+    this.color= ""+"rgba("+r+","+g+","+b+","+1+")";
+    this.velx=velx;
+    this.vely=vely;
+}
+
+function random(valor){
+    return(Math.random()*valor);
+}
+
+//carga los parametros randomicos de las particulas
+function llenar_arreglo(){
+    for(i=0;i&lt;nstars;i++){
+        stars.push(new Star( random(elemento.width),
+                             random(elemento.height), 
+                             random(200),
+                             Math.floor(random(255)),
+                             Math.floor(random(255)),
+                             Math.floor(random(255)),
+                             random(4)-2,
+                             random(4)-2 ));
+    }
+}
+
+//dibuja las particulas sobre el canvas
+function mostrar_arreglo(){
+    for(i=0;i&lt;nstars;i++){
+        if (i===10) stars[10].color;
+        lienzo.fillStyle=stars[i].color;
+        lienzo.fillRect(stars[i].x,stars[i].y,3.5,3.5);
+    }
+}
+
+//cambiar los parametros de posición y velocidad de las particulas
+function mover_arreglo(){
+    for(i=0;i&lt;nstars;i++){
+        stars[i].x += stars[i].velx;
+        stars[i].y += stars[i].vely;
+        //control de bordes
+        if(stars[i].x &gt; elemento.width || stars[i].x&lt;0 )stars[i].velx=-stars[i].velx;
+        if(stars[i].y &gt; elemento.height || stars[i].y&lt;0 )stars[i].vely=-stars[i].vely;
+        stars[i].timer-=10; 
+            if(stars[i].timer&gt;200) stars[i].timer=200; 
+            alpha=stars[i].timer/200;
+    }
+}
+
+window.addEventListener("load",iniciar,false);				
+				</code></pre>
+<!--**********************************************************************************************-->
+	
+				<p id="parr">
+					El sistema se comportará de la siguiente forma:
+				</p>			
+
+				<center>
+					<button name="btniniciar" type="button" 
+						value="iniciar" onclick="start()">    
+						INICIAR 
+					</button>
+
+					<button name="btnparar" type="button" 
+							value="parar" onclick="stop()">    
+						DETENER
+					</button>
+					
+					<form action="">
+						<p>Número de particulas (0 - 10000) <br>
+							<input type="number" id="int" name="name" min="0" max="10000" value="1000" onkeypress="return pulsar(event, this.form)" onchange="particulas(this.form)">
+						</p>
+					</form>
+
+					<div id="contenedor2">
+						<canvas id="lienzo2" width="700" height="450"></canvas>
+					</div>	
+				</center>
+				
+			</div>
+			
+		</article> 
+  </section> 
+ 
+	<footer id="main-footer">
+      <p>Lenin Ulcuango</p>
+      <p>&copy; Todos los Derechos Reservados</p>
+	</footer> 
+
+</body>
+</html>
+
